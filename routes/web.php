@@ -7,9 +7,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\WablasController;
 
 Route::get('/', function () {
-    return auth()->check()
-        ? redirect()->route('home')
-        : view('welcome');
+    return redirect()->route('home');
 });
 
 Route::middleware('guest')->group(function () {
