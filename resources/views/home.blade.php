@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoCExpire - Panduan Penggunaan</title>
+    <link rel="icon" href="/asset/Logo.png" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: Poppins, sans-serif; background: #f7f4ff; }
+        .app-shell { min-height: 100vh; }
+        .sidebar {
+            width: 260px;
+            min-width: 260px;
+            flex: 0 0 260px;
+            background: linear-gradient(180deg, #6b2bff 0%, #4c1d95 100%);
+            color: #ffffff;
+            border-right: none;
+        }
+        .sidebar-brand {
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .nav-pill {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: 14px;
+            color: rgba(255,255,255,0.92);
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .nav-pill.active {
+            background: rgba(255,255,255,0.18);
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .nav-pill:hover { background: rgba(255,255,255,0.14); }
+        .sidebar .mt-auto {
+            border-top: 1px solid rgba(255,255,255,0.18);
+        }
+        .sidebar .text-secondary {
+            color: rgba(255,255,255,0.75) !important;
+        }
+        .topbar { border-bottom: 1px solid #e9d5ff; background: #ffffff; }
+        .sidebar-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+        .nav-icon {
+            width: 18px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+        }
+        .soft-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 18px 40px rgba(76, 29, 149, 0.08);
+        }
+        .wa-contact-wrap {
+            width: 210px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .wa-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            height: 46px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #16a34a;
+            text-decoration: none;
+            box-shadow: 0 12px 20px rgba(15, 23, 42, 0.08);
+            border: 1px solid #d1fae5;
+            overflow: hidden;
+            width: 46px;
+            transition: width 0.25s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .wa-contact-wrap:hover .wa-contact {
+            width: 200px;
+            background: #ecfdf3;
+            color: #15803d;
+            box-shadow: 0 14px 24px rgba(16, 185, 129, 0.2);
+        }
+        .wa-contact span {
+            white-space: nowrap;
+            font-weight: 600;
+            opacity: 1;
+            transition: opacity 0.2s ease;
+        }
+        .wa-contact-wrap:hover .wa-text { opacity: 1; }
+        .wa-icon {
+            width: 34px;
+            height: 34px;
+            display: inline-block;
+            flex: 0 0 34px;
+            background: transparent;
+            border-radius: 50%;
+            padding: 0;
+        }
+        .wa-icon img { width: 54px; height: 34px; display: block; border-radius: 50%; }
+        .btn-soft { border-radius: 12px; }
+        .text-primary { color: #7c3aed !important; }
+        .text-secondary { color: #5b4e8c !important; }
+    </style>
+</head>
+<body>
+<div class="app-shell d-flex">
+    <aside class="sidebar d-none d-lg-flex flex-column">
+        <div class="p-4 border-bottom d-flex align-items-center gap-2">
+            <img src="/asset/Logo.png" alt="DoCExpire" class="sidebar-logo">
+            <div class="sidebar-brand fs-4 mb-0">DoCExpire</div>
+        </div>
+        <nav class="p-3 d-grid gap-2">
+            <a class="nav-pill active" href="{{ route('home') }}">
+                <span class="nav-icon me-2"><i class="bi bi-book"></i></span>
+                Panduan Penggunaan
+            </a>
+            <a class="nav-pill" href="{{ route('documents.index') }}">
+                <span class="nav-icon me-2"><i class="bi bi-file-earmark-text"></i></span>
+                Dokumen
+            </a>
+            @if (auth()->user()?->is_admin)
+                <a class="nav-pill" href="{{ route('admin.users.index') }}">
+                    <span class="nav-icon me-2"><i class="bi bi-people"></i></span>
+                    Admin
+                </a>
+            @endif
+            @php
+                $adminWaRaw = (string) config('services.admin_whatsapp');
+                $adminWaDigits = preg_replace('/\D+/', '', $adminWaRaw);
+                if (str_starts_with($adminWaDigits, '0')) {
+                    $adminWaDigits = '62'.ltrim($adminWaDigits, '0');
+                }
+            @endphp
+        </nav>
+        <div class="mt-auto p-3 border-top">
+            <div class="small text-secondary mb-2">Login sebagai: <strong>{{ auth()->user()->name }}</strong></div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-outline-danger btn-soft w-100">Logout</button>
+            </form>
+        </div>
+    </aside>
+
+    <main class="flex-fill">
+        <div class="p-4 px-lg-5 py-4">
+            <div class="soft-card p-4">
+                <div>
+                    <h1 class="h5 fw-semibold mb-2">Panduan Penggunaan DoCExpire</h1>
+                    <p class="text-secondary mb-0">
+                        Ikuti langkah berikut agar dokumenmu selalu terpantau dan pengingat otomatis terkirim tepat waktu.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-1">
+                <div class="col-12 col-lg-6">
+                    <div class="soft-card p-4 h-100">
+                        <h2 class="h6 fw-semibold mb-3">Langkah 1: Lengkapi Profil</h2>
+                        <ul class="text-secondary mb-0">
+                            <li>Pastikan nomor WhatsApp kamu benar.</li>
+                            <li>Gunakan format <strong>62xxxxxxxxxxx</strong> agar pengingat bisa terkirim.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="soft-card p-4 h-100">
+                        <h2 class="h6 fw-semibold mb-3">Langkah 2: Tambah Dokumen</h2>
+                        <ul class="text-secondary mb-0">
+                            <li>Buka menu <strong>Dokumen</strong>.</li>
+                            <li>Klik <strong>Tambah Dokumen</strong>, isi nama dokumen.</li>
+                            <li>Set <strong>Tanggal Kadaluarsa</strong> dengan benar.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="soft-card p-4 h-100">
+                        <h2 class="h6 fw-semibold mb-3">Langkah 3: Cek Jadwal Reminder</h2>
+                        <ul class="text-secondary mb-0">
+                            <li>Reminder akan dikirim pada H-30, H-7, H-3, dan H-1.</li>
+                            <li>Isi tanggal kadaluarsa dengan benar supaya jadwalnya akurat.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="soft-card p-4 h-100">
+                        <h2 class="h6 fw-semibold mb-3">Langkah 4: Kelola Dokumenmu</h2>
+                        <ul class="text-secondary mb-0">
+                            <li>Edit dokumen kapan saja jika ada perubahan tanggal.</li>
+                            <li>Hapus dokumen yang sudah tidak berlaku.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="soft-card p-4 mt-4">
+                <h2 class="h6 fw-semibold mb-2">Contoh Alur</h2>
+                <p class="text-secondary mb-0">
+                    Tambah dokumen -> sistem hitung H-30/H-7/H-3/H-1 -> reminder otomatis masuk ke WhatsApp kamu.
+                </p>
+            </div>
+            @if ($adminWaDigits)
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="wa-contact-wrap">
+                        <a class="wa-contact" href="https://wa.me/{{ $adminWaDigits }}" target="_blank" rel="noopener">
+                            <span class="wa-icon" aria-hidden="true">
+                                <img src="/asset/Logo-WhatsApp.png" alt="WhatsApp">
+                            </span>
+                            <span class="wa-text">Hubungi Admin</span>
+                        </a>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
