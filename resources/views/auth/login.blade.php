@@ -67,7 +67,7 @@
 <div class="min-vh-100 d-flex align-items-center justify-content-center px-4 py-5">
     <div class="glass w-100" style="max-width: 420px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.08); padding: 2rem;">
         <div class="d-flex align-items-center gap-3 mb-4">
-            <img src="{{ asset('asset/Logo.png') }}" alt="DoCExpire logo" width="40" height="40" class="object-fit-contain">
+            <img src="/asset/Logo.png" alt="DoCExpire logo" width="40" height="40" class="object-fit-contain">
             <div>
                 <h1 class="h4 fw-bold text-primary mb-1">DoCExpire</h1>
                 <p class="text-secondary small mb-0">Masuk ke akunmu</p>

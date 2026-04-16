@@ -8,13 +8,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/dashboard.css') }}?v={{ filemtime(public_path('css/dashboard.css')) }}" rel="stylesheet">
+    @php($dashboardCssPath = public_path('css/dashboard.css'))
+    <link href="/css/dashboard.css?v={{ file_exists($dashboardCssPath) ? filemtime($dashboardCssPath) : '1' }}" rel="stylesheet">
 </head>
 <body class="bg-light text-dark">
 <nav class="navbar navbar-expand-lg bg-white bg-opacity-75 border-bottom sticky-top navbar-blur">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/dashboard') }}">
-            <img src="{{ asset('asset/Logo.png') }}" alt="DoCExpire logo" width="40" height="40" class="object-fit-contain">
+            <img src="/asset/Logo.png" alt="DoCExpire logo" width="40" height="40" class="object-fit-contain">
             <span class="fw-bold text-primary fs-4">DoCExpire</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">

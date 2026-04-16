@@ -7,7 +7,10 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\WablasController;
 
 Route::get('/', function () {
-    return redirect()->route('home');
+    // Guest lands on marketing dashboard, authenticated users go to app home.
+    return auth()->check()
+        ? redirect()->route('home')
+        : redirect()->route('dashboard');
 });
 
 Route::middleware('guest')->group(function () {
