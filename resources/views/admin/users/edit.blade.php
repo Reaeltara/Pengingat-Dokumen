@@ -107,7 +107,7 @@
         <div class="topbar px-4 px-lg-5 py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
             <div>
                 <h1 class="h5 fw-semibold mb-1">Edit User</h1>
-                <p class="text-secondary small mb-0">Ubah nama user. Nomor WhatsApp tetap tersimpan.</p>
+                <p class="text-secondary small mb-0">Ubah nama dan nomor WhatsApp user.</p>
             </div>
             <div>
                 <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary btn-soft">Kembali</a>
@@ -136,15 +136,19 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label">Nomor WhatsApp</label>
-                        @php
-                            $rawPhone = (string) $user->phone;
-                            $left = substr($rawPhone, 0, 5);
-                            $right = strlen($rawPhone) > 3 ? substr($rawPhone, -3) : '';
-                            $masked = $rawPhone ? ($left . '****' . $right) : '-';
-                        @endphp
-                        <div class="form-control bg-light">{{ $masked }}</div>
-                        <div class="form-text text-secondary">Nomor WhatsApp tidak diubah lewat halaman ini.</div>
+                        <label for="phone" class="form-label">Nomor WhatsApp</label>
+                        <input
+                            type="text"
+                            name="phone"
+                            id="phone"
+                            value="{{ old('phone', $user->phone) }}"
+                            class="form-control @error('phone') is-invalid @enderror"
+                            required
+                        >
+                        @error('phone')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text text-secondary">Gunakan format 62xxxxxxxxxxx. Nomor ini dipakai untuk pengingat WhatsApp.</div>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-soft">Simpan Perubahan</button>

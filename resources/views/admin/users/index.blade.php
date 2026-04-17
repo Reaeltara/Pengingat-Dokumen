@@ -132,13 +132,7 @@
                                         @if (! $user->phone)
                                             -
                                         @else
-                                            @php
-                                                $rawPhone = (string) $user->phone;
-                                                $left = substr($rawPhone, 0, 5);
-                                                $right = strlen($rawPhone) > 3 ? substr($rawPhone, -3) : '';
-                                                $masked = $left . '****' . $right;
-                                            @endphp
-                                            {{ $masked }}
+                                            {{ $user->phone }}
                                         @endif
                                     </td>
                                     <td>{{ $user->created_at?->format('d M Y') ?? '-' }}</td>

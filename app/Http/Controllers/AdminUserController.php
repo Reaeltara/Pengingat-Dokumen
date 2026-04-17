@@ -48,13 +48,16 @@ class AdminUserController extends Controller
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:20', 'unique:users,phone,'.$user->id],
         ]);
+
+        $data['phone'] = trim($data['phone']);
 
         $user->update($data);
 
         return redirect()
             ->route('admin.users.index')
-            ->with('success', 'Nama user berhasil diperbarui.');
+            ->with('success', 'Data user berhasil diperbarui.');
     }
 
     public function destroy(User $user): RedirectResponse
