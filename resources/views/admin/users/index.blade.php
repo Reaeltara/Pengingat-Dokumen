@@ -41,9 +41,49 @@
         }
         .btn-soft { border-radius: 12px; }
         .text-secondary { color: #5b4e8c !important; }
+
+        .mobile-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+            background: #ffffff;
+            border-bottom: 1px solid #e9d5ff;
+        }
     </style>
 </head>
 <body>
+<div class="mobile-topbar d-lg-none">
+    <div class="container-fluid px-3 py-2 d-flex align-items-center justify-content-between">
+        <div class="fw-bold text-primary">DoCExpire</div>
+        <button
+            type="button"
+            class="btn btn-outline-secondary btn-soft"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#mobileNav"
+            aria-controls="mobileNav"
+        >
+            Menu
+        </button>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel">
+    <div class="offcanvas-header">
+        <div class="sidebar-brand fs-5 mb-0" id="mobileNavLabel">DoCExpire</div>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-grid gap-2">
+        <a class="nav-pill active" href="{{ route('admin.users.index') }}">Admin</a>
+        <div class="mt-3 pt-3" style="border-top: 1px solid #e9d5ff;">
+            <div class="small text-secondary mb-2">Login sebagai: <strong>{{ auth()->user()->name }}</strong></div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-outline-danger btn-soft w-100">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="app-shell d-flex">
     <aside class="sidebar d-none d-lg-flex flex-column">
         <div class="p-4 border-bottom">

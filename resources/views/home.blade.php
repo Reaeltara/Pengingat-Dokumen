@@ -108,9 +108,94 @@
         .btn-soft { border-radius: 12px; }
         .text-primary { color: #7c3aed !important; }
         .text-secondary { color: #5b4e8c !important; }
+
+        .mobile-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+            background: #ffffff;
+            border-bottom: 1px solid #e9d5ff;
+        }
+
+        .offcanvas.docexpire-offcanvas {
+            background: linear-gradient(180deg, #6b2bff 0%, #4c1d95 100%);
+            color: #ffffff;
+        }
+        .offcanvas.docexpire-offcanvas .btn-close { filter: invert(1) grayscale(1) brightness(2); }
+        .offcanvas.docexpire-offcanvas .text-secondary { color: rgba(255,255,255,0.78) !important; }
+
+        @media (max-width: 991.98px) {
+            .wa-contact-wrap {
+                position: fixed;
+                right: 16px;
+                bottom: 16px;
+                z-index: 1040;
+                width: auto;
+            }
+            .wa-contact { width: 200px; }
+        }
     </style>
 </head>
 <body>
+@php
+    $adminWaRaw = (string) config('services.admin_whatsapp');
+    $adminWaDigits = preg_replace('/\D+/', '', $adminWaRaw);
+    if (str_starts_with($adminWaDigits, '0')) {
+        $adminWaDigits = '62'.ltrim($adminWaDigits, '0');
+    }
+@endphp
+
+<div class="mobile-topbar d-lg-none">
+    <div class="container-fluid px-3 py-2 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+            <img src="/asset/Logo.png" alt="DoCExpire" class="sidebar-logo">
+            <div class="fw-bold">DoCExpire</div>
+        </div>
+        <button
+            type="button"
+            class="btn btn-outline-secondary btn-soft"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#mobileNav"
+            aria-controls="mobileNav"
+        >
+            Menu
+        </button>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start docexpire-offcanvas d-lg-none" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel">
+    <div class="offcanvas-header">
+        <div class="d-flex align-items-center gap-2">
+            <img src="/asset/Logo.png" alt="DoCExpire" class="sidebar-logo">
+            <div class="sidebar-brand fs-5 mb-0" id="mobileNavLabel">DoCExpire</div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-grid gap-2">
+        <a class="nav-pill active" href="{{ route('home') }}">
+            <span class="nav-icon me-2"><i class="bi bi-book"></i></span>
+            Panduan Penggunaan
+        </a>
+        <a class="nav-pill" href="{{ route('documents.index') }}">
+            <span class="nav-icon me-2"><i class="bi bi-file-earmark-text"></i></span>
+            Dokumen
+        </a>
+        @if (auth()->user()?->is_admin)
+            <a class="nav-pill" href="{{ route('admin.users.index') }}">
+                <span class="nav-icon me-2"><i class="bi bi-people"></i></span>
+                Admin
+            </a>
+        @endif
+        <div class="mt-3 pt-3" style="border-top: 1px solid rgba(255,255,255,0.18);">
+            <div class="small text-secondary mb-2">Login sebagai: <strong>{{ auth()->user()->name }}</strong></div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-outline-light btn-soft w-100">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="app-shell d-flex">
     <aside class="sidebar d-none d-lg-flex flex-column">
         <div class="p-4 border-bottom d-flex align-items-center gap-2">
@@ -132,13 +217,6 @@
                     Admin
                 </a>
             @endif
-            @php
-                $adminWaRaw = (string) config('services.admin_whatsapp');
-                $adminWaDigits = preg_replace('/\D+/', '', $adminWaRaw);
-                if (str_starts_with($adminWaDigits, '0')) {
-                    $adminWaDigits = '62'.ltrim($adminWaDigits, '0');
-                }
-            @endphp
         </nav>
         <div class="mt-auto p-3 border-top">
             <div class="small text-secondary mb-2">Login sebagai: <strong>{{ auth()->user()->name }}</strong></div>

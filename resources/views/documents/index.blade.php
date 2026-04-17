@@ -183,6 +183,22 @@
         .compact-actions .btn { padding: 0.35rem 0.65rem; font-size: 0.85rem; }
         .compact-search .form-control { padding-top: 0.35rem; padding-bottom: 0.35rem; font-size: 0.85rem; }
         .compact-search .form-select { padding-top: 0.35rem; padding-bottom: 0.35rem; font-size: 0.85rem; }
+
+        .mobile-nav-btn {
+            border-radius: 999px;
+            height: 38px;
+            padding: 0 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .offcanvas.docexpire-offcanvas {
+            background: linear-gradient(180deg, #6b2bff 0%, #4c1d95 100%);
+            color: #ffffff;
+        }
+        .offcanvas.docexpire-offcanvas .btn-close { filter: invert(1) grayscale(1) brightness(2); }
+        .offcanvas.docexpire-offcanvas .text-secondary { color: rgba(255,255,255,0.78) !important; }
     </style>
 </head>
 <body>
@@ -221,6 +237,39 @@
     }
 @endphp
 
+<div class="offcanvas offcanvas-start docexpire-offcanvas d-lg-none" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel">
+    <div class="offcanvas-header">
+        <div class="d-flex align-items-center gap-2">
+            <img src="/asset/Logo.png" alt="DoCExpire" class="sidebar-logo">
+            <div class="sidebar-brand fs-5 mb-0" id="mobileNavLabel">DoCExpire</div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-grid gap-2">
+        <a class="nav-pill" href="{{ route('home') }}">
+            <span class="nav-icon me-2"><i class="bi bi-book"></i></span>
+            Panduan Penggunaan
+        </a>
+        <a class="nav-pill active" href="{{ route('documents.index') }}">
+            <span class="nav-icon me-2"><i class="bi bi-file-earmark-text"></i></span>
+            Dokumen
+        </a>
+        @if (auth()->user()?->is_admin)
+            <a class="nav-pill" href="{{ route('admin.users.index') }}">
+                <span class="nav-icon me-2"><i class="bi bi-people"></i></span>
+                Admin
+            </a>
+        @endif
+        <div class="mt-3 pt-3" style="border-top: 1px solid rgba(255,255,255,0.16);">
+            <div class="small text-secondary mb-2">Login sebagai: <strong>{{ auth()->user()->name }}</strong></div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-outline-light btn-soft w-100">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="app-shell d-flex">
     <aside class="sidebar d-none d-lg-flex flex-column">
         <div class="p-4 border-bottom d-flex align-items-center gap-2">
@@ -255,6 +304,18 @@
     <main class="flex-fill">
         <div class="topbar compact-topbar px-4 px-lg-5 py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
             <div>
+                <div class="d-flex align-items-center gap-2 d-lg-none mb-1">
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary mobile-nav-btn"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#mobileNav"
+                        aria-controls="mobileNav"
+                    >
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="fw-semibold">Menu</div>
+                </div>
                 <h1 class="h5 fw-semibold mb-1 compact-title">Dashboard Dokumen</h1>
                 <p class="text-light small mb-0 compact-subtitle">Pantau dokumen dan masa berlaku di satu tempat.</p>
             </div>
