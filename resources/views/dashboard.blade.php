@@ -8,10 +8,161 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    @php($dashboardCssPath = public_path('css/dashboard.css'))
-    <link href="/css/dashboard.css?v={{ file_exists($dashboardCssPath) ? filemtime($dashboardCssPath) : '1' }}" rel="stylesheet">
+    <style>
+        body { font-family: Poppins, sans-serif; background: #f7f4ff; }
+
+        .hero-bg {
+            background: linear-gradient(120deg, #f2eaff, #ffffff, #f6f1ff, #ede9fe);
+            background-size: 300% 300%;
+            animation: gradientMove 14s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .grid-pattern {
+            background-image:
+                linear-gradient(rgba(124, 58, 237, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .float { animation: float 6s ease-in-out infinite; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all .8s ease;
+        }
+
+        .fade-up.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .card-hover {
+            transition: all .3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .08);
+        }
+
+        .navbar-blur {
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-section {
+            padding: 7rem 0;
+        }
+
+        .section-padding {
+            padding: 6rem 0;
+        }
+
+        .text-primary { color: #7c3aed !important; }
+        .bg-primary { background-color: #7c3aed !important; }
+        .text-secondary { color: #5b4e8c !important; }
+        .bg-light { background-color: #f7f4ff !important; }
+        .border-bottom { border-color: #e9d5ff !important; }
+
+        .btn-primary {
+            background-color: #7c3aed;
+            border-color: #7c3aed;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #6d28d9;
+            border-color: #6d28d9;
+        }
+
+        .btn-outline-primary {
+            color: #7c3aed;
+            border-color: #7c3aed;
+        }
+
+        .btn-outline-primary:hover,
+        .btn-outline-primary:focus {
+            background-color: #7c3aed;
+            border-color: #7c3aed;
+            color: #ffffff;
+        }
+
+        .wa-contact-wrap {
+            width: 210px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .wa-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            height: 46px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #16a34a;
+            text-decoration: none;
+            box-shadow: 0 12px 20px rgba(15, 23, 42, 0.08);
+            border: 1px solid #d1fae5;
+            overflow: hidden;
+            width: 46px;
+            transition: width 0.25s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .wa-contact-wrap:hover .wa-contact {
+            width: 200px;
+            background: #ecfdf3;
+            color: #15803d;
+            box-shadow: 0 14px 24px rgba(16, 185, 129, 0.2);
+        }
+        .wa-contact span {
+            white-space: nowrap;
+            font-weight: 600;
+            opacity: 1;
+            transition: opacity 0.2s ease;
+        }
+        .wa-contact-wrap:hover .wa-text { opacity: 1; }
+        .wa-icon {
+            width: 34px;
+            height: 34px;
+            display: inline-block;
+            flex: 0 0 34px;
+            background: transparent;
+            border-radius: 15%;
+        }
+        .wa-icon img { width: 54px; height: 34px; display: block; border-radius: 15%; }
+
+        @media (max-width: 991.98px) {
+            .wa-contact-wrap {
+                position: fixed;
+                right: 16px;
+                bottom: 16px;
+                z-index: 1040;
+                width: auto;
+            }
+            .wa-contact { width: 200px; }
+        }
+    </style>
 </head>
 <body class="bg-light text-dark">
+@php($adminWaRaw = (string) config('services.admin_whatsapp'))
+@php($adminWaDigits = preg_replace('/\D+/', '', $adminWaRaw))
+@php($adminWaDigits = str_starts_with($adminWaDigits, '0') ? '62'.ltrim($adminWaDigits, '0') : $adminWaDigits)
 <nav class="navbar navbar-expand-lg bg-white bg-opacity-75 border-bottom sticky-top navbar-blur">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/dashboard') }}">
@@ -22,14 +173,24 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarMain">
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+            <ul class="navbar-nav mx-auto align-items-lg-center gap-lg-3">
                 <li class="nav-item"><a class="nav-link" href="#about">Tentang</a></li>
                 <li class="nav-item"><a class="nav-link" href="#documents">Dokumen</a></li>
                 <li class="nav-item"><a class="nav-link" href="#how">Cara Kerja</a></li>
-                <li class="nav-item">
-                    <a href="{{ url('/login') }}" class="btn btn-primary px-4 rounded-pill">Masuk</a>
-                </li>
             </ul>
+            <div class="d-flex align-items-lg-center gap-lg-3">
+                @if (! empty($adminWaDigits ?? null))
+                    <div class="wa-contact-wrap">
+                        <a class="wa-contact" href="https://wa.me/{{ $adminWaDigits ?? '' }}" target="_blank" rel="noopener">
+                            <span class="wa-icon" aria-hidden="true">
+                                <img src="/asset/Logo-WhatsApp.png" alt="WhatsApp">
+                            </span>
+                            <span class="wa-text">Hubungi Admin</span>
+                        </a>
+                    </div>
+                @endif
+                <a href="{{ url('/login') }}" class="btn btn-primary px-4 rounded-pill">Masuk</a>
+            </div>
         </div>
     </div>
 </nav>

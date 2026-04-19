@@ -62,49 +62,6 @@
             border-radius: 16px;
             box-shadow: 0 18px 40px rgba(76, 29, 149, 0.08);
         }
-        .wa-contact-wrap {
-            width: 210px;
-            display: flex;
-            justify-content: flex-end;
-        }
-        .wa-contact {
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            height: 46px;
-            border-radius: 999px;
-            background: #ffffff;
-            color: #16a34a;
-            text-decoration: none;
-            box-shadow: 0 12px 20px rgba(15, 23, 42, 0.08);
-            border: 1px solid #d1fae5;
-            overflow: hidden;
-            width: 46px;
-            transition: width 0.25s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .wa-contact-wrap:hover .wa-contact {
-            width: 200px;
-            background: #ecfdf3;
-            color: #15803d;
-            box-shadow: 0 14px 24px rgba(16, 185, 129, 0.2);
-        }
-        .wa-contact span {
-            white-space: nowrap;
-            font-weight: 600;
-            opacity: 1;
-            transition: opacity 0.2s ease;
-        }
-        .wa-contact-wrap:hover .wa-text { opacity: 1; }
-        .wa-icon {
-            width: 34px;
-            height: 34px;
-            display: inline-block;
-            flex: 0 0 34px;
-            background: transparent;
-            border-radius: 50%;
-            padding: 0;
-        }
-        .wa-icon img { width: 54px; height: 34px; display: block; border-radius: 50%; }
         .btn-soft { border-radius: 12px; }
         .text-primary { color: #7c3aed !important; }
         .text-secondary { color: #5b4e8c !important; }
@@ -124,27 +81,9 @@
         .offcanvas.docexpire-offcanvas .btn-close { filter: invert(1) grayscale(1) brightness(2); }
         .offcanvas.docexpire-offcanvas .text-secondary { color: rgba(255,255,255,0.78) !important; }
 
-        @media (max-width: 991.98px) {
-            .wa-contact-wrap {
-                position: fixed;
-                right: 16px;
-                bottom: 16px;
-                z-index: 1040;
-                width: auto;
-            }
-            .wa-contact { width: 200px; }
-        }
     </style>
 </head>
 <body>
-@php
-    $adminWaRaw = (string) config('services.admin_whatsapp');
-    $adminWaDigits = preg_replace('/\D+/', '', $adminWaRaw);
-    if (str_starts_with($adminWaDigits, '0')) {
-        $adminWaDigits = '62'.ltrim($adminWaDigits, '0');
-    }
-@endphp
-
 <div class="mobile-topbar d-lg-none">
     <div class="container-fluid px-3 py-2 d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-2">
@@ -284,18 +223,6 @@
                     Tambah dokumen -> sistem hitung H-30/H-7/H-3/H-1 -> reminder otomatis masuk ke WhatsApp kamu.
                 </p>
             </div>
-            @if ($adminWaDigits)
-                <div class="d-flex justify-content-end mt-3">
-                    <div class="wa-contact-wrap">
-                        <a class="wa-contact" href="https://wa.me/{{ $adminWaDigits }}" target="_blank" rel="noopener">
-                            <span class="wa-icon" aria-hidden="true">
-                                <img src="/asset/Logo-WhatsApp.png" alt="WhatsApp">
-                            </span>
-                            <span class="wa-text">Hubungi Admin</span>
-                        </a>
-                    </div>
-                </div>
-            @endif
         </div>
     </main>
 </div>
